@@ -1,0 +1,31 @@
+<?php 
+include"dbcon.php";
+session_start();
+$a=$_POST['email'];
+$b=$_POST['password'];
+$data="select * from staff where email='$a' && password='$b'";
+$query=mysqli_query($con,$data);
+$a=mysqli_num_rows($query);
+$b=mysqli_fetch_array($query);
+// print_r($b);
+if($a==1){
+     $role=$b['role'];
+     if($role=='Admin'){
+     	$_SESSION['admin']=$b['email'];
+     	header('location:admin/header.php');
+     }
+     elseif($role=='Staff'){
+     	$_SESSION['staff']=$b['email'];
+     	$_SESSION['staff_id']=$b['id'];
+     	header('location:staff/staff_detail.php');
+     }
+     elseif($role=='Doctor'){
+     	$_SESSION['doctor']=$b['email'];
+     	$_SESSION['doctor_id']=$b['id'];
+     	header('location:doctor/doctor.php');
+     }
+}
+else{
+	header('location:index.php');
+}
+?>
